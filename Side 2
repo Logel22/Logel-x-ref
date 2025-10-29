@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logel AS – Registrering av verdier hittil i år</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #111;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      padding-bottom: 80px; /* plass til sticky knapp */
+    }
+
+    h1 {
+      text-align: center;
+      color: #0f0;
+      margin-bottom: 30px;
+    }
+
+    .total-block {
+      background-color: #222;
+      padding: 20px;
+      border-radius: 0;
+      box-shadow: 0 0 10px #0f0;
+      max-width: 400px;
+      margin: 0 auto 30px auto;
+      text-align: center;
+    }
+
+    .firm-title {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #0f0;
+    }
+
+    .summary {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #fff;
+      margin-top: 10px;
+    }
+
+    .firms-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 700px) {
+      .firms-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .firm-block {
+      background-color: #222;
+      padding: 20px;
+      border-radius: 0;
+      box-shadow: 0 0 10px #0f0;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 0;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .saved {
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    .nav-button {
+      position: fixed;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    .nav-button a {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #0f0;
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      box-shadow: 0 0 10px #0f0;
+    }
+
+    .nav-button a:hover {
+      background-color: #0c0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Logel AS – Registrering av verdier</h1>
+
+  <div class="total-block">
+    <div class="firm-title">Total registrert beløp</div>
+    <div class="summary" id="total-summary">kr 0</div>
+    <div class="firm-title" style="margin-top: 20px;">Snitt av prosentsats</div>
+    <div class="summary" id="average-percent">0%</div>
+  </div>
+
+  <div class="firms-grid" id="firms-container"></div>
+
+  <div class="nav-button">
+    side1.htmlGå til oversikt (Side 1)</a>
+  </div>
+
+  <script>
+    const firms = [
+      "Lefdal Installasjon AS",
+      "Elektro kontakten AS",
+      "Smart elektro AS",
+      "Alt installasjon AS",
+      "Billkvam & Fagerhaug AS"
+    ];
+
+    const container = document.getElementById("firms-container");
+
+    function updateTotalAndAverage() {
+      let total = 0;
+      let percentSum = 0;
+      let percentCount = 0;
+
+      firms.forEach((_, index) => {
+        const amountEl = document.getElementById(`amount${index}`);
+        const percentEl = document.getElementById(`percent${index}`);
+
+        const amount = parseFloat(amountEl?.value) || 0;
+        const percent = parseFloat(percentEl?.value);
+
+        total += amount;
+
+        if (!isNaN(percent)) {
+          percentSum += percent;
+          percentCount++;
+        }
+      });
+
+      const average = percentCount > 0 ? (percentSum / percentCount).toFixed(1) : 0;
+
+      document.getElementById("total-summary").innerHTML = `kr ${total.toLocaleString('no-NO')}`;
+      document.getElementById("average-percent").innerHTML = `${average}%`;
+    }
+
+    function autoSave(index) {
+      const amount = document.getElementById(`amount${index}`).value;
+      const percent = document.getElementById(`percent${index}`).value;
+      localStorage.setItem(`firm${index}`, JSON.stringify({ amount, percent }));
+      document.getElementById(`saved${index}`).textContent = "Lagret!";
+      setTimeout(() => {
+        document.getElementById(`saved${index}`).textContent = "Lagret automatisk";
+      }, 2000);
+      updateTotalAndAverage();
+    }
+
+    firms.forEach((firm, index) => {
+      const saved = JSON.parse(localStorage.getItem(`firm${index}`)) || { amount: "", percent: "" };
+
+      const block = document.createElement("div");
+      block.className = "firm-block";
+
+      block.innerHTML = `
+        <div class="firm-title">${firm}</div>
+        <input type="number" id="amount${index}" placeholder="Beløp (kr)" value="${saved.amount}">
+        <input type="number" id="percent${index}" placeholder="Prosent (%)" value="${saved.percent}">
+        <div class="saved" id="saved${index}">Lagret automatisk</div>
+      `;
+      container.appendChild(block);
+
+      document.getElementById(`amount${index}`).addEventListener("input", () => autoSave(index));
+      document.getElementById(`percent${index}`).addEventListener("input", () => autoSave(index));
+    });
+
+    updateTotalAndAverage();
+  </script>
+
+</body>
+</html>
