@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Logel AS – Tapt inntjening → Xref</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
       background-color: #111;
@@ -16,7 +20,7 @@
     h1 {
       text-align: center;
       color: #0f0;
-      font-size: 1.8rem;
+      font-size: 2rem;
       margin-bottom: 30px;
     }
 
@@ -25,20 +29,20 @@
       padding: 25px;
       border-radius: 0;
       box-shadow: 0 0 12px #0f0;
-      max-width: 500px;
+      max-width: 600px;
       margin: 0 auto 40px auto;
       text-align: center;
     }
 
     .loss-title {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: bold;
       color: #0f0;
       margin-bottom: 10px;
     }
 
     .loss-value {
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: bold;
       color: #fff;
     }
@@ -49,7 +53,7 @@
       gap: 20px;
     }
 
-    @media (min-width: 700px) {
+    @media (min-width: 600px) {
       .firms-grid {
         grid-template-columns: 1fr 1fr;
       }
@@ -69,7 +73,7 @@
     }
 
     .summary {
-      font-size: 1.1rem;
+      font-size: 1rem;
       margin-top: 10px;
     }
   </style>
