@@ -6,11 +6,12 @@
   <title>Logel AS – Registrering av tapt inntjening</title>
 
   <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.jsscript src="https://www.gstatic.com/firebasejs/10-firestore.js</script>
+  <script src="https://www.gstatic.com/firebasejs/se-app.js</script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-fireipt>
 
   <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyXXXXXXX",
+      apiKey: "AIzaSyXXXXXXX", // ← Sett inn din API-nøkkel
       authDomain: "logel-web.firebaseapp.com",
       projectId: "logel-web",
       storageBucket: "logel-web.appspot.com",
