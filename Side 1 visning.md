@@ -6,12 +6,12 @@
   <title>Logel AS – Tapt inntjening → Xref</title>
 
   <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebasept>
-  <script src="static.com/firebasejs/10.5.0/firebase-firestore.js</script>
+  https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js</script>
+  <script src="https://www.gstatic.com/firebasejs/10-firestore.js
 
   <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyXXXXXXX",
+      apiKey: "AIzaSyXXXXXXX", // ← Sett inn din API-nøkkel
       authDomain: "logel-web.firebaseapp.com",
       projectId: "logel-web",
       storageBucket: "logel-web.appspot.com",
@@ -43,7 +43,6 @@
     .loss-block {
       background-color: #222;
       padding: 25px;
-      border-radius: 0;
       box-shadow: 0 0 12px #0f0;
       max-width: 500px;
       margin: 0 auto 40px auto;
@@ -78,7 +77,6 @@
     .firm-block {
       background-color: #222;
       padding: 20px;
-      border-radius: 0;
       box-shadow: 0 0 10px #0f0;
     }
 
@@ -121,10 +119,9 @@
     let percentSum = 0;
     let percentCount = 0;
 
-    firms.forEach((firm, index) => {
+    const promises = firms.map((firm, index) => {
       const firmId = `firm${index}`;
-
-      db.collection("tapteInntekter").doc(firmId).get().then(doc => {
+      return db.collection("tapteInntekter").doc(firmId).get().then(doc => {
         const data = doc.exists ? doc.data() : { amount: 0, percent: 0 };
         const amount = parseFloat(data.amount) || 0;
         const percent = parseFloat(data.percent) || 0;
@@ -145,11 +142,15 @@
           <div class="summary">Prosent: ${percent}%</div>
         `;
         container.appendChild(block);
-
-        const average = percentCount > 0 ? (percentSum / percentCount).toFixed(1) : 0;
-        document.getElementById("loss-value").textContent = `kr ${total.toLocaleString('no-NO')}`;
-        document.getElementById("average-value").textContent = `${average}%`;
       });
+    });
+
+    Promise.all(promises).then(() => {
+      const average = percentCount > 0 ? (percentSum / percentCount).toFixed(1) : 0;
+      document.getElementById("loss-value").textContent = `kr ${total.toLocaleString('no-NO')}`;
+      document.getElementById("average-value").textContent = `${average}%`;
+    }).catch(error => {
+      console.error("Feil ved henting av data:", error);
     });
   </script>
 
